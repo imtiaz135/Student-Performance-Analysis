@@ -1,21 +1,11 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
-
-# ------------------------------
-# 1. Load Dataset
-# ------------------------------
 df = pd.read_csv("data/sales_datas.csv")
-
-# ------------------------------
-# 2. Data Cleaning & Validation
-# ------------------------------
 df["Date"] = pd.to_datetime(df["Date"])
-
 df["Quantity"] = pd.to_numeric(df["Quantity"], errors="coerce")
 df["Price"] = pd.to_numeric(df["Price"], errors="coerce")
 df["Total_Sales"] = pd.to_numeric(df["Total_Sales"], errors="coerce")
-
 df.fillna({
     "Quantity": df["Quantity"].mean(),
     "Price": df["Price"].mean(),
@@ -23,17 +13,9 @@ df.fillna({
 }, inplace=True)
 
 df["Month"] = df["Date"].dt.month
-
-# ------------------------------
-# 3. Analysis
-# ------------------------------
 monthly_sales = df.groupby("Month")["Total_Sales"].sum()
 product_sales = df.groupby("Product")["Total_Sales"].sum()
 region_sales = df.groupby("Region")["Total_Sales"].sum()
-
-# ------------------------------
-# 4. Visualization
-# ------------------------------
 os.makedirs("visualizations", exist_ok=True)
 
 # Chart 1: Monthly Sales Trend
